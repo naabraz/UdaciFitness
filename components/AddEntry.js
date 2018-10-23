@@ -5,7 +5,7 @@ import { getMetricMetaInfo } from '../utils/helpers'
 
 import UdaciSlider from './UdaciSlider'
 import UdaciStepper from './UdaciStepper'
-import UdaciSteppers from './UdaciStepper';
+import DateHeader from './DateHeader';
 
 export default class AddEntry extends Component {
   state = {
@@ -51,6 +51,7 @@ export default class AddEntry extends Component {
 
     return (
       <View>
+        <DateHeader date={(new Date()).toLocaleDateString()} />
         {Object.keys(metaInfo).map((key) => {
           const { getIcon, type, ...rest } = metaInfo[key]
           const value = this.state[key]
@@ -64,7 +65,7 @@ export default class AddEntry extends Component {
                     onChange={(value) => this.slide(key, value)}
                     {...rest}
                   />
-                : <UdaciSteppers
+                : <UdaciStepper
                     value={value}
                     onIncrement={() => this.increment(key)}
                     onDecrement={() => this.decrement(key)}
