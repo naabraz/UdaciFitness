@@ -30,7 +30,19 @@ export default class Live extends Component {
   }
 
   askPermission = () => {
+    Permissions.askAsync(Permissions.LOCATION)
+      .then(({ status }) => {
+        if (status === 'granted') {
+          return this.setLocation()
+        }
 
+        this.setState(() => ({ status }))
+      })
+      .catch((error) => {
+        console.warn('Error asking Location permission: ', error)
+
+        this.setState(() => ({ status: 'undetermined' }))
+      })
   }
 
   setLocation = () => {
@@ -91,7 +103,7 @@ export default class Live extends Component {
             You're heading
           </Text>
           <Text style={styles.direction}>
-            North
+            {direction}
           </Text>
         </View>
 
@@ -101,7 +113,7 @@ export default class Live extends Component {
               Altitude
             </Text>
             <Text style={[styles.subHeader,{ color: white }]}>
-              {200} feet
+              {Math.round(coords.altitude * 3.2808)} Feet
             </Text>
           </View>
 
@@ -110,7 +122,7 @@ export default class Live extends Component {
               Speed
             </Text>
             <Text style={[styles.subHeader,{ color: white }]}>
-              {300} mph
+              {Math.round(coords.speed * 2.2369).toFixed(1)} MPH
             </Text>
           </View>
         </View>
